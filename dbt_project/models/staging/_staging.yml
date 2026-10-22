@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "Record pesanan yang lolos data contract, dimuat oleh scripts/load_duckdb.py."
+    tables:
+      - name: orders
+
+models:
+  - name: stg_orders
+    description: "Staging pesanan: nama kolom & tipe data konsisten. Satu baris per order_id."
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+# TODO: tambahkan deskripsi kolom lain (dipakai oleh `dbt docs generate`)
