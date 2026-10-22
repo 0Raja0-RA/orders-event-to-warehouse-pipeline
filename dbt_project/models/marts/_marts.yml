@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: "Satu baris per customer_id."
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+
+  - name: dim_product_category
+    description: "Satu baris per kategori produk."
+    columns:
+      - name: product_category
+        data_tests: [unique, not_null]
+
+  - name: fct_orders
+    description: "Fact: satu baris per order_id, berisi foreign key dan metrik transaksi."
+    columns:
+      - name: order_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customer')
+                field: customer_id
+      - name: product_category
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_product_category')
+                field: product_category
+
+  - name: mart_daily_sales
+    description: "Agregat penjualan bersih per tanggal, kategori, dan metode pembayaran."
+# TODO: deskripsi kolom + tentukan status mana yang dihitung sebagai penjualan
+#       (mis. paid & shipped; cancelled/refunded dikecualikan) dan tulis aturannya.
