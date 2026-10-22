@@ -1,0 +1,9 @@
+# Salin menjadi profiles.yml (file itu di-ignore git), atau jalankan dbt
+# dengan: dbt run --profiles-dir .
+orders_warehouse:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../warehouse/warehouse.duckdb
+      threads: 1
