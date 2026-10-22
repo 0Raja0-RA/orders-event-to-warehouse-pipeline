@@ -1,0 +1,44 @@
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# --- Secrets / environment ---
+.env
+*.env
+
+# --- Editor / OS noise (termasuk OneDrive) ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Data hasil run: dapat dibuat ulang lewat pipeline ---
+# raw layer (Parquet) dan checkpoint watermark tidak di-commit
+data/raw/*
+data/state/*
+!data/raw/.gitkeep
+!data/state/.gitkeep
+# data/valid dan data/rejected sengaja DI-commit (kecil, jadi bukti audit)
+
+# --- Warehouse DuckDB ---
+warehouse/*
+!warehouse/.gitkeep
+*.duckdb
+*.duckdb.wal
+
+# --- dbt ---
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+dbt_project/.user.yml
+dbt_project/profiles.yml
+logs/
+
+# --- Catatan kerja pribadi (panduan laporan, checklist) ---
+notes/
