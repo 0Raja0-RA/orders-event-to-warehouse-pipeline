@@ -1,5 +1,4 @@
-# Salin menjadi profiles.yml (file itu di-ignore git), atau jalankan dbt
-# dengan: dbt run --profiles-dir .
+# Dijalankan dari folder dbt_project: dbt debug / run / test / docs generate
 orders_warehouse:
   target: dev
   outputs:
