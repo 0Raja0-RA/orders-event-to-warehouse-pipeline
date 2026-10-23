@@ -15,7 +15,6 @@ STATE_DIR = ROOT / "data" / "state"
 
 RAW_PARQUET = RAW_DIR / "orders.parquet"
 WATERMARK_FILE = STATE_DIR / "watermark.json"
-LOG_FILE = ROOT / "logs" / "ingestion.log"
 
 # --- Warehouse ---
 DUCKDB_PATH = ROOT / "warehouse" / "warehouse.duckdb"
