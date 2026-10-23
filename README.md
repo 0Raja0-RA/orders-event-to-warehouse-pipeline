@@ -25,14 +25,11 @@ Kafka producer -> topic "orders" -> consumer
 │   ├── raw/           # raw Parquet (dibuat oleh pipeline, tidak di-commit)
 │   ├── valid/         # record lolos contract
 │   ├── rejected/      # record ditolak + alasan
-│   └── state/         # checkpoint watermark (tidak di-commit)
-├── scripts/           # batch_ingest, contract, validate, producer, consumer,
-│                      # transform, benchmark, skew_experiment, load_duckdb
-├── tests/             # unit test data contract
+│   └── watermark.json # checkpoint incremental loading (dibuat pipeline, tidak di-commit)
+├── scripts/           # batch_ingest, validate, producer, consumer,
+│                      # transform, benchmark, load_duckdb
 ├── warehouse/         # file DuckDB (tidak di-commit)
 ├── dbt_project/       # model staging & marts, tests, dokumentasi
-├── docs/
-│   └── evidence/      # tangkapan layar & hasil ukur (benchmark, skew, dbt docs)
 ├── docker-compose.yml # Kafka single-node (KRaft)
 └── requirements.txt
 ```
@@ -53,7 +50,6 @@ python scripts/transform.py
 python scripts/load_duckdb.py
 
 cd dbt_project
-cp profiles.yml.example profiles.yml
 dbt run && dbt test && dbt docs generate
 ```
 
