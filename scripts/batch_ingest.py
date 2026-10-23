@@ -31,7 +31,7 @@ def main():
     ap.add_argument("--source", default="data/source/orders.csv")
     ap.add_argument("--out", default="data/raw")
     ap.add_argument("--page-size", type=int, default=25)
-    ap.add_argument("--checkpoint", default="data/state/watermark.json")
+    ap.add_argument("--checkpoint", default="data/watermark.json")
     ap.add_argument("--fail-first", type=int, default=0, help="simulasi N kegagalan sementara pada halaman 1")
     args = ap.parse_args()
     source = pd.read_csv(args.source, dtype=str, keep_default_na=False)
