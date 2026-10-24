@@ -2,23 +2,31 @@ version: 2
 
 models:
   - name: dim_customer
-    description: "Satu baris per customer_id."
+    description: "Dimensi pelanggan: satu baris per customer_id."
     columns:
       - name: customer_id
+        description: "Identitas pelanggan."
         data_tests: [unique, not_null]
+      - name: first_order_date
+        description: "Tanggal pesanan pertama pelanggan."
+      - name: total_orders
+        description: "Jumlah pesanan valid pelanggan (semua status)."
 
   - name: dim_product_category
-    description: "Satu baris per kategori produk."
+    description: "Dimensi kategori produk: satu baris per kategori."
     columns:
       - name: product_category
+        description: "Nama kategori produk."
         data_tests: [unique, not_null]
 
   - name: fct_orders
-    description: "Fact: satu baris per order_id, berisi foreign key dan metrik transaksi."
+    description: "Fakta pesanan: satu baris per order_id, berisi foreign key dan metrik transaksi."
     columns:
       - name: order_id
+        description: "Kunci bisnis pesanan (grain)."
         data_tests: [unique, not_null]
       - name: customer_id
+        description: "Foreign key ke dim_customer."
         data_tests:
           - not_null
           - relationships:
@@ -26,14 +34,25 @@ models:
                 to: ref('dim_customer')
                 field: customer_id
       - name: product_category
+        description: "Foreign key ke dim_product_category."
         data_tests:
           - not_null
           - relationships:
               arguments:
                 to: ref('dim_product_category')
                 field: product_category
+      - name: is_recognized_sale
+        description: "True bila status paid atau shipped; cancelled dan refunded tidak dihitung sebagai penjualan."
+      - name: net_amount
+        description: "Nilai bersih setelah diskon."
+        data_tests: [not_null]
 
   - name: mart_daily_sales
-    description: "Agregat penjualan bersih per tanggal, kategori, dan metode pembayaran."
-# TODO: deskripsi kolom + tentukan status mana yang dihitung sebagai penjualan
-#       (mis. paid & shipped; cancelled/refunded dikecualikan) dan tulis aturannya.
+    description: "Penjualan bersih per tanggal, kategori produk, dan metode pembayaran (hanya paid dan shipped)."
+    columns:
+      - name: order_date
+        description: "Tanggal pesanan (UTC)."
+      - name: order_count
+        description: "Jumlah pesanan yang diakui sebagai penjualan."
+      - name: net_sales
+        description: "Jumlah net_amount pesanan yang diakui sebagai penjualan."

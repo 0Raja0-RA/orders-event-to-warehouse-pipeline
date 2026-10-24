@@ -1,2 +1,7 @@
--- TODO: satu baris per customer_id (select distinct dari ref('stg_orders'))
-select distinct customer_id from {{ ref('stg_orders') }}
+-- Dimensi pelanggan: satu baris per customer_id.
+select
+    customer_id,
+    min(order_date) as first_order_date,
+    count(*) as total_orders
+from {{ ref('stg_orders') }}
+group by customer_id
