@@ -19,7 +19,8 @@ def load_valid(batch_path, stream_path):
         stream = pl.scan_ndjson(stream_path).with_columns(
             pl.col("order_ts").str.to_datetime(time_unit="ns", time_zone="UTC"))
         lf = pl.concat([lf, stream.select(lf.collect_schema().names())], how="vertical_relaxed")
-    return lf.unique(subset="order_id", keep="last", maintain_order=True)
+    # urut order_id agar hasil deterministik (urutan stream mengikuti urutan baca partition)
+    return lf.unique(subset="order_id", keep="last").sort("order_id")
 
 def transform(lf):
     return (
