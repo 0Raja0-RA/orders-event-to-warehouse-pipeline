@@ -3,14 +3,26 @@ version: 2
 sources:
   - name: raw
     schema: raw
-    description: "Record pesanan yang lolos data contract, dimuat oleh scripts/load_duckdb.py."
+    description: "Tabel mentah di DuckDB yang dimuat oleh scripts/load_duckdb.py."
     tables:
       - name: orders
+        description: "Record valid (lolos data contract) dari jalur batch dan stream, sudah dihitung gross/net amount."
+      - name: rejected_orders
+        description: "Record yang ditolak data contract beserta alasan penolakan; tidak dipakai model, untuk audit."
 
 models:
   - name: stg_orders
-    description: "Staging pesanan: nama kolom & tipe data konsisten. Satu baris per order_id."
+    description: "Staging pesanan: satu baris per order_id dengan nama dan tipe kolom konsisten."
     columns:
       - name: order_id
+        description: "Kunci bisnis pesanan."
         data_tests: [unique, not_null]
-# TODO: tambahkan deskripsi kolom lain (dipakai oleh `dbt docs generate`)
+      - name: customer_id
+        description: "Identitas pelanggan."
+        data_tests: [not_null]
+      - name: order_date
+        description: "Tanggal pesanan (UTC), diturunkan dari order_ts."
+        data_tests: [not_null]
+      - name: net_amount
+        description: "gross_amount * (1 - discount_pct); discount_pct 0.10 berarti diskon 10%."
+        data_tests: [not_null]
